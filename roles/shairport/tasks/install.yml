@@ -1,0 +1,31 @@
+---
+- name: Install packages for shairport-sync
+  dnf:
+    name:
+      - shairport-sync
+      - avahi
+      - alsa-utils
+
+- name: Install sudoers.d for shairport-sync
+  copy:
+    src: "files/sudoers.d/shairport-sync"
+    dest: "/etc/sudoers.d/shairport-sync"
+  when:
+    - enable_mute == True
+
+- name: Install mute command
+  copy:
+    src: "files/mute"
+    dest: "/usr/local/bin/mute"
+    mode: 0755
+  when:
+    - enable_mute == True
+
+- name: Install unmute command
+  copy:
+    src: "files/unmute"
+    dest: "/usr/local/bin/unmute"
+    mode: 0755
+  when:
+    - enable_mute == True
+...

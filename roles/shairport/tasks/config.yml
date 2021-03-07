@@ -1,0 +1,55 @@
+---
+- name: Make sure config.txt exists
+  file:
+    path: /boot/config.txt
+    state: touch
+    mode: u=rw,g=r,o=r
+  when:
+    - overlay is defined
+
+- name: Update config.txt with correct overlay
+  lineinfile:
+    dest: /boot/config.txt
+    line: "dtoverlay={{ overlay }}"
+  when:
+    - overlay is defined
+
+- name: Update config.txt to disable built in audio
+  lineinfile:
+    dest: /boot/config.txt
+    regexp: "dtparam=audio="
+    line: "dtparam=audio=off"
+  when:
+    - overlay is defined
+
+- name: shairport - enable unmute
+  lineinfile:
+    dest: /etc/shairport-sync.conf
+    regexp: "\trun_this_before_play_begins ="
+    line: "\trun_this_before_play_begins = \"/usr/bin/sudo /usr/local/bin/unmute\";"
+  when:
+    - enable_mute == True
+
+- name: shairport - enable mute
+  lineinfile:
+    dest: /etc/shairport-sync.conf
+    regexp: "\trun_this_after_play_ends ="
+    line: "\trun_this_after_play_ends = \"/usr/bin/sudo /usr/local/bin/mute\";"
+  when:
+    - enable_mute == True
+
+- name: shairport - enable wait for cmd completion
+  lineinfile:
+    dest: /etc/shairport-sync.conf
+    regexp: "\twait_for_completion ="
+    line: "\twait_for_completion = \"yes\";"
+  when:
+    - enable_mute == True
+
+- name: shairport - set mixer
+  lineinfile:
+    dest: /etc/shairport-sync.conf
+    regexp: '\smixer_control_name ='
+    line: '  mixer_control_name = "{{ mixer }}";'
+  when:
+    - mixer is defined

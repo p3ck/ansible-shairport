@@ -1,0 +1,4 @@
+[rpi-aarch64-el8]
+name=rpi-aarch64-el8
+baseurl=https://people.centos.org/pgreco/rpi_aarch64_el8/
+gpgcheck=0

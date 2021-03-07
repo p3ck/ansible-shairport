@@ -1,0 +1,5 @@
+[shairport]
+rpi-example overlay=iqaudio-dacplus mixer=Digital enable_mute=True
+
+[rpi-aarch64-el8:children]
+shairport

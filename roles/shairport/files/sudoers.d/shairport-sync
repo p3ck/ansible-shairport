@@ -1,0 +1,1 @@
+shairport-sync  ALL=NOPASSWD: /usr/local/bin/unmute, /usr/local/bin/mute

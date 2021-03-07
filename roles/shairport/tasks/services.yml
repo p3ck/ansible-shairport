@@ -1,0 +1,12 @@
+---
+- name: Disable firewalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: Enable shairport-sync
+  service:
+    name: shairport-sync
+    state: restarted
+    enabled: yes

@@ -1,0 +1,45 @@
+---
+- name: Resize root filesystem
+  script:
+    cmd: rootfs-expand
+
+- name: Lock root password, only ssh key
+  user:
+    name: root
+    password_lock: true
+
+- name: Install rpi-aarch64-el8 repo
+  copy:
+    src: files/rpi-aarch64-el8.repo
+    dest: /etc/yum.repos.d/rpi-aarch64-el8.repo
+
+- name: Enable additional repos
+  dnf:
+    disable_gpg_check: true
+    name:
+      - epel-release
+      - https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm
+      - https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm
+
+- name: Install vc-utils
+  dnf:
+    name: raspberrypi-vc-utils
+    state: latest
+
+- name: Update to latest packages
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Restart system to pick up changes
+  command: shutdown -r +1 "System rebooting"
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: ssh stopped
+  local_action: wait_for host={{ inventory_hostname }} port=22 state=stopped
+
+- name: ssh started
+  local_action: wait_for host={{ inventory_hostname }} port=22 state=started
+...

@@ -1,0 +1,17 @@
+---
+- name: rpi aarch64 setup
+  hosts: rpi-aarch64-el8
+  become: '{{ become | default("no") }}'
+  become_user: '{{ become_user | default("root") }}'
+  remote_user: '{{ remoteuser | default("root") }}'
+  roles:
+    - rpi-setup
+
+- name: Shairport sync setup
+  hosts: shairport
+  become: '{{ become | default("no") }}'
+  become_user: '{{ become_user | default("root") }}'
+  remote_user: '{{ remoteuser | default("root") }}'
+  roles:
+    - shairport
+...

@@ -1,0 +1,8 @@
+---
+- name: "shairport-sync : Install"
+  include_tasks: install.yml
+- name: "shairport-sync : Config"
+  include_tasks: config.yml
+- name: "shairport-sync : Services"
+  include_tasks: services.yml
+...
